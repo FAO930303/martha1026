@@ -15,7 +15,8 @@ def index():
 	X+="<a href=/about>郭恣妤網頁</a><br>"
 	X+="<a href=/welcome?guest=martha>歡迎</a><br><br>"
 	X+="<a href=/account>使用表單方式傳值</a><br>"
-	X+="<a href=/account>人選之人(按年齡由小到大)</a><br>"
+	X += "<br><a href=/read>讀取Firestore資料</a><br>"
+
 	return X
 
 @app.route("/mis")
