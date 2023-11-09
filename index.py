@@ -15,7 +15,7 @@ def index():
 	X+="<a href=/about>郭恣妤網頁</a><br>"
 	X+="<a href=/welcome?guest=martha>歡迎</a><br><br>"
 	X+="<a href=/account>使用表單方式傳值</a><br>"
-	X += "<br><a href=/read>讀取Firestore資料</a><br>"
+	X += "<br><a href=/wave>人選知人演員名單</a><br>"
 
 	return X
 
@@ -57,5 +57,5 @@ def wave():
     return Result
 
 
-#if __name__ == "__main__":
-	#app.run()
+if __name__ == "__main__":
+	app.run()
