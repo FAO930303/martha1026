@@ -3,7 +3,7 @@ from datetime import datetime
 app = Flask(__name__)
 @app.route("/")
 def index():
-	X="作者:郭恣妤<br>"
+	X="作者:郭恣妤2023/11/09<br>"
 	X+="<a href=/mis>資訊管理導論</a><br>"
 	X+="<a href=/today>日期時間</a><br>"
 	X+="<a href=/about>郭恣妤網頁</a><br>"
