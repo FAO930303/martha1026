@@ -15,7 +15,9 @@ def index():
 	X+="<a href=/about>郭恣妤網頁</a><br>"
 	X+="<a href=/welcome?guest=martha>歡迎</a><br><br>"
 	X+="<a href=/account>使用表單方式傳值</a><br>"
-	X += "<br><a href=/wave>人選知人演員名單</a><br>"
+	X+="<br><a href=/wave>人選之人演員名單(按年齡由小到大)</a><br>"
+	X+="<br><a href=/books>全部圖書</a><br>"
+	X+="<br><a href=/serch>根據書名關鍵字查詢圖書</a><br>"
 
 	return X
 
@@ -55,6 +57,39 @@ def wave():
     for doc in docs:         
         Result += "演員：{}".format(doc.to_dict()) + "<br>"    
     return Result
+
+@app.route("/books")
+def books():
+    Result = ""
+    db = firestore.client()
+    collection_ref = db.collection("圖書精選")    
+    docs = collection_ref.order_by("anniversary").get()    
+    for doc in docs:
+    	bk= doc.to_dict()
+    	Result+="書名：<a href="+bk["url"]+">"+bk["title"]+"</a><br>"
+    	Result+="作者："+bk["author"]+"<br>"
+    	Result+=str(bk["anniversary"])+"週年紀念版"+"<br>"
+    	Result+="<img src="+bk["cover"]+"></img><br><br>"
+    return Result
+@app.route("/serch", methods=["GET", "POST"])
+def serch():
+    if request.method == "POST":
+        keyword = request.form["keyword"]
+        Result = "您輸入的關鍵字是：" + keyword 
+
+        db = firestore.client()
+        collection_ref = db.collection("圖書精選")
+        docs = collection_ref.order_by("anniversary").get()
+        for doc in docs:
+        	bk= doc.to_dict()
+        	if keyword in bk["title"]:
+        		Result+="書名：<a href="+bk["url"]+">"+bk["title"]+"</a><br>"
+        		Result+="作者："+bk["author"]+"<br>"
+        		Result+=str(bk["anniversary"])+"週年紀念版"+"<br>"
+        		Result+="<img src="+bk["cover"]+"></img><br><br>"
+        return Result
+    else:
+        return render_template("serchbk.html")
 
 
 if __name__ == "__main__":
