@@ -1,3 +1,4 @@
-X=input("請輸入名字:")
-Y=input("請輸入你的課程:")
-print("早安!{}!,今日課程{}介紹python".format(X,Y))
+import firebase_admin
+from firebase_admin import credentials
+cred = credentials.Certificate("serviceAccountKey.json")
+firebase_admin.initialize_app(cred)
