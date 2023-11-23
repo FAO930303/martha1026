@@ -6,20 +6,24 @@ firebase_admin.initialize_app(cred)
 
 from flask import Flask, render_template, request
 from datetime import datetime
+
+import requests
+from bs4 import BeautifulSoup
+
 app = Flask(__name__)
 @app.route("/")
 def index():
-	X="作者:郭恣妤2023/11/23<br>"
-	X+="<a href=/mis>資訊管理導論</a><br>"
-	X+="<a href=/today>日期時間</a><br>"
-	X+="<a href=/about>郭恣妤網頁</a><br>"
-	X+="<a href=/welcome?guest=martha>歡迎</a><br><br>"
-	X+="<a href=/account>使用表單方式傳值</a><br>"
-	X+="<br><a href=/wave>人選之人演員名單(按年齡由小到大)</a><br>"
-	X+="<br><a href=/books>全部圖書</a><br>"
-	X+="<br><a href=/serch>根據書名關鍵字查詢圖書</a><br>"
-
-	return X
+    X="作者:郭恣妤2023/11/23<br>"
+    X+="<a href=/mis>資訊管理導論</a><br>"
+    X+="<a href=/today>日期時間</a><br>"
+    X+="<a href=/about>郭恣妤網頁</a><br>"
+    X+="<a href=/welcome?guest=martha>歡迎</a><br><br>"
+    X+="<a href=/account>使用表單方式傳值</a><br>"
+    X+="<br><a href=/wave>人選之人演員名單(按年齡由小到大)</a><br>"
+    X+="<br><a href=/books>全部圖書</a><br>"
+    X+="<br><a href=/serch>根據書名關鍵字查詢圖書</a><br>"
+    X+="<br><a href=/spider>網路爬蟲擷取子青老師課程資料</a><br>"
+    return X
 
 @app.route("/mis")
 def course():
@@ -90,6 +94,24 @@ def serch():
         return Result
     else:
         return render_template("serchbk.html")
+
+@app.route("/spider")
+def spider():
+    info=""
+
+    url = "https://www1.pu.edu.tw/~tcyang/course.html"
+    Data = requests.get(url)
+    Data.encoding = "utf-8"
+    #print(Data.text)
+    sp = BeautifulSoup(Data.text, "html.parser")
+    result=sp.select(".team-box")
+
+    for X in result:
+        info+="<a href="+X.find("a").get("href")+">"+X.find("h4").text+"</a><br>"
+        info+=X.find("p").text+"<br>"
+        info+=X.find("a").get("href")+"<br>"
+        info+="<img src=https://www1.pu.edu.tw/~tcyang/"+X.find("img").get("src")+" width=200 height=300></img><br><br>"
+    return info
 
 
 if __name__ == "__main__":
